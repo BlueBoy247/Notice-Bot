@@ -88,7 +88,6 @@ async def check_reminders(channel, days_dict):
     days_left = (date_obj - now).days
     if days_left == 0:
       notice_message += f"今天是{name}\n！"
-      await delete(name)
     elif days_left > 0:
       notice_message += f'距離 {name} 還有 {days_left} 天！\n'
   await channel.send(notice_message)
