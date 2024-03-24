@@ -4,7 +4,6 @@ from discord import app_commands
 import asyncio
 import datetime
 import pytz
-from keep_alive import keep_alive
 import json
 
 TOKEN = '0000' # 機器人的TOKEN
@@ -16,6 +15,7 @@ ROLE_NAME = 'ROLE' # 要提及的身分組名稱
 set_hour, set_minute, set_second, set_microsecond = 0, 0, 0, 0 # 00:00:00.00
 
 # 設定每幾秒檢查一次是否到達傳送訊息的時間
+# 預設每60秒檢查一次
 interval = 60
 
 intents = discord.Intents.default()
@@ -67,7 +67,7 @@ def update_last_notification_date(date):
 
 
 # 在傳送通知前檢查日期
-async def check_notification_date(channel):
+async def check_notification_date():
   last_date_str = load_last_notification_date()
   current_date = datetime.datetime.now(timezone).date()
 
@@ -87,7 +87,7 @@ async def check_reminders(channel, days_dict):
     date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
     days_left = (date_obj - now).days
     if days_left == 0:
-      notice_message += f"今天是{name}\n！"
+      notice_message += f"今天是{name}！\n"
     elif days_left > 0:
       notice_message += f'距離 {name} 還有 {days_left} 天！\n'
   await channel.send(notice_message)
@@ -115,11 +115,10 @@ async def on_ready():
 
     if now >= target_time:
       # 檢查今日的倒數通知是否尚未傳送
-      should_send_notification = await check_notification_date(channel)
+      should_send_notification = await check_notification_date()
       if should_send_notification:
         # 傳送倒數通知
         await check_reminders(channel, days_dict)
-        pass
 
       # 計算下一次（隔天）傳送通知的時間
       next_target_time = target_time + datetime.timedelta(days=1)
@@ -239,9 +238,5 @@ class CustomHelpCommand(commands.DefaultHelpCommand):
     await self.get_destination().send(embed=embed)
     
 bot.help_command = CustomHelpCommand()
-
-
-keep_alive()
-
 
 bot.run(TOKEN)

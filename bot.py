@@ -4,7 +4,6 @@ from discord import app_commands
 import asyncio
 import datetime
 import pytz
-from keep_alive import keep_alive
 import json
 
 TOKEN = '0000' # The TOKEN for your Discord bot
@@ -68,7 +67,7 @@ def update_last_notification_date(date):
 
 
 # Check the date before sending notification
-async def check_notification_date(channel):
+async def check_notification_date():
   last_date_str = load_last_notification_date()
   current_date = datetime.datetime.now(timezone).date()
 
@@ -88,7 +87,7 @@ async def check_reminders(channel, days_dict):
     date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
     days_left = (date_obj - now).days
     if days_left == 0:
-      notice_message += f"Today is {name}\n!"
+      notice_message += f"Today is {name}!\n"
     elif days_left > 0:
       notice_message += f'There are {days_left} days left until {name}!\n'
   await channel.send(notice_message)
@@ -116,11 +115,10 @@ async def on_ready():
 
     if now >= target_time:
       # Check if today's countdown notification has not been sent yet
-      should_send_notification = await check_notification_date(channel)
+      should_send_notification = await check_notification_date()
       if should_send_notification:
         # Send countdown notifications
         await check_reminders(channel, days_dict)
-        pass
 
       # Calculate the next day's notification sending time
       next_target_time = target_time + datetime.timedelta(days=1)
@@ -224,8 +222,7 @@ class CustomHelpCommand(commands.DefaultHelpCommand):
     all_command = {
       'help': '`!help command`\nInquire about the syntax of a specific command.\nexample:`!help add`',
       'test': "`!test`\nTest the bot's running status",
-      'add':
-      '`!add yyyy-mm-dd name`\nAdd an event named "name".\nexample:`!add 2023-01-01 Birthday`',
+      'add': '`!add yyyy-mm-dd name`\nAdd an event named "name".\nexample:`!add 2023-01-01 Birthday`',
       'delete': '`!delete name`\nDelete the event named "name".\nexample:`!delete Birthday`',
       'check': '`!check`\nQuery the currently existing events.'
     }
@@ -241,9 +238,5 @@ class CustomHelpCommand(commands.DefaultHelpCommand):
     await self.get_destination().send(embed=embed)
     
 bot.help_command = CustomHelpCommand()
-
-
-keep_alive()
-
 
 bot.run(TOKEN)
