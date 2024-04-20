@@ -14,8 +14,7 @@ ROLE_NAME = 'ROLE' # 要提及的身分組名稱
 # 設定訊息傳送時間 (hh:mm:ss.ff)
 set_hour, set_minute, set_second, set_microsecond = 0, 0, 0, 0 # 00:00:00.00
 
-# 設定每幾秒檢查一次是否到達傳送訊息的時間
-# 預設每60秒檢查一次
+# 設定每幾秒檢查一次是否到達傳送訊息的時間，預設每60秒檢查一次
 interval = 60
 
 intents = discord.Intents.default()

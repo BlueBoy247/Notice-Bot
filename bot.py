@@ -14,8 +14,7 @@ ROLE_NAME = 'ROLE' # Name of the Role to Mention
 # Set the message sending time (hh:mm:ss.ff)
 set_hour, set_minute, set_second, set_microsecond = 0, 0, 0, 0 # 00:00:00.00
 
-# Set the check interval in seconds
-# The default is to check every 60 seconds if it's time to send the message
+# Set the check interval in seconds. The default is to check every 60 seconds if it's time to send the message
 interval = 60
 
 intents = discord.Intents.default()
