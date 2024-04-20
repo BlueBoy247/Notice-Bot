@@ -3,6 +3,7 @@ English | [繁體中文](./README-zht.md)
 
 A Discord Bot that automatically sends daily event countdown messages to a specified channel on a designated server and mentions a specific role.
 
+![icon](Notice_bot.png)
 
 ## Introduction
 Here are the required files for this Discord bot, along with descriptions for each file:
